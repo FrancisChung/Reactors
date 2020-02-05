@@ -6,8 +6,18 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load keys
+COGSVCS_CLIENTURL = os.environ["COGSVCS_CLIENTURL"]
+COGSVCS_KEY = os.environ["COGSVCS_KEY"]
+COGSVCS_REGION = 'northcentralus'
 
 # Create vision_client
+from msrest.authentication import CognitiveServicesCredentials
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
+from azure.cognitiveservices.vision.computervision.models import ComputerVisionErrorException
+
+vision_credentials = CognitiveServicesCredentials(COGSVCS_KEY)
+vision_client = ComputerVisionClient(COGSVCS_CLIENTURL, vision_credentials )
+
 
 # Create face_client
 
