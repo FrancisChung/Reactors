@@ -53,6 +53,7 @@ def translate():
     messages = extract_text_from_image(image.blob, vision_client)
 
     # TODO: Add code to translate text
+    messages = translate_text(messages, target_language, COGSVCS_KEY, COGSVCS_REGION)
 
     return render_template("translate.html", image_uri=image.uri, target_language=target_language, messages=messages)
 
@@ -122,3 +123,37 @@ def extract_text_from_image(image, client):
 
     except ComputerVisionErrorException as e:
         return ["Computer Vision API Error: " + e.message]
+
+def translate_text(lines, target_language, key, region):
+    uri = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=" + target_language
+
+    headers = {
+        'Ocip-Apim-Subscription-Key': key,
+        'Ocip-Apim-Subscription-Region': region,
+        'Content-type': 'application/json'
+    }
+
+    input=[]
+
+    for line in lines:
+        input.append({"text": line})
+
+    try:
+        response = requests.post(uri, headers=headers, json=input)
+        response.raise_for_status() #Raise Exception if call fails
+        results = response.json()
+
+        translated_lines = []
+
+        for result in results:
+            for translated_line in result["translations"]:
+                translated_lines.append(translated_line["text"])
+
+        return translated_lines
+
+
+    except requests.exceptions.HTTPError as e:
+        return ["Error calling the Translator Text API: " + e.strerror]
+
+    except Exception as e:
+        return ["Error calling the Translator Text API"]
