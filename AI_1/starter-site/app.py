@@ -5,6 +5,10 @@ from flask import Flask, render_template, request
 from dotenv import load_dotenv
 load_dotenv()
 
+# Need to create .env containing the following entries from your Azure account #
+# COGSVCS_CLIENTURL=
+# COGSVCS_KEY=
+
 # Load keys
 COGSVCS_CLIENTURL = os.environ["COGSVCS_CLIENTURL"]
 COGSVCS_KEY = os.environ["COGSVCS_KEY"]
