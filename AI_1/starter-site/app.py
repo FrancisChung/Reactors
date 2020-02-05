@@ -50,6 +50,7 @@ def translate():
     messages = []
 
     # TODO: Add code to retrieve text from picture
+    messages = extract_text_from_image(image.blob, vision_client)
 
     # TODO: Add code to translate text
 
