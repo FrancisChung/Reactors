@@ -128,19 +128,19 @@ def translate_text(lines, target_language, key, region):
     uri = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=" + target_language
 
     headers = {
-        'Ocip-Apim-Subscription-Key': key,
-        'Ocip-Apim-Subscription-Region': region,
+        'Ocp-Apim-Subscription-Key': key,
+        'Ocp-Apim-Subscription-Region': region,
         'Content-type': 'application/json'
     }
 
     input=[]
 
     for line in lines:
-        input.append({"text": line})
+        input.append({ "text": line })
 
     try:
         response = requests.post(uri, headers=headers, json=input)
-        response.raise_for_status() #Raise Exception if call fails
+        response.raise_for_status() # Raise exception if call failed
         results = response.json()
 
         translated_lines = []
@@ -150,7 +150,6 @@ def translate_text(lines, target_language, key, region):
                 translated_lines.append(translated_line["text"])
 
         return translated_lines
-
 
     except requests.exceptions.HTTPError as e:
         return ["Error calling the Translator Text API: " + e.strerror]
