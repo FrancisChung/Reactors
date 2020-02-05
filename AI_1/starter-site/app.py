@@ -103,3 +103,21 @@ def get_image(request):
         return Image(request.files["file"])
     else:
         return Image()
+
+def extract_text_from_image(image, client):
+    try:
+        result = client.recognize_printed_text_in_stream(image=image)
+
+        lines=[]
+        if len(result.regions) == 0:
+            lines.append("Photo contains no text to translate")
+
+        else:
+            for line in result.regions[0].lines:
+                text = " ".join([word.text for word in line.words])
+                lines.append((text))
+
+        return lines
+
+    except ComputerVisionErrorException as e:
+        return ["Computer Vision API Error: " + e.message]
